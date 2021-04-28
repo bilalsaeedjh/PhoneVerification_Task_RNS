@@ -1,7 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:phone_auth/Screens/HomeScreen/home.dart';
+import 'package:phone_auth/Screens/otp.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -10,8 +11,22 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  //Initializing Firebase for app
+  Future<void> initializeDefault() async {
+    FirebaseApp app = await Firebase.initializeApp();
+    assert(app != null);
+  }
+
+  bool inProgress=true;
+
   var _number=TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    initializeDefault();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,30 +50,8 @@ class _LoginState extends State<Login> {
             ),
             keyboardType: TextInputType.number,
           ),
-          /*TextButton(
-            style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-              overlayColor: MaterialStateProperty.resolveWith<Color>(
-                    (Set<MaterialState> states) {
-                  if (states.contains(MaterialState.hovered))
-                    return Colors.blue.withOpacity(0.04);
-                  if (states.contains(MaterialState.focused) ||
-                      states.contains(MaterialState.pressed))
-                    return Colors.blue.withOpacity(0.12);
-                  return null; // Defer to the widget's default.
-                },
-              ),
-            ),
-            onPressed: () {
-              Get.to(Home());
-            },
-            child: Text('Login'),
-          )*/
            ElevatedButton(
-              child: Text("Login"), /*onPressed: () => Get.to(Home())*/
-              onPressed:(){
-
-              }
+              child: Text("Login"), onPressed: () => Get.to(OTPScreen(_number.text,inProgress))
            )
         ],
       ),
